@@ -98,14 +98,4 @@ The app exposes `/api/health` for health checks. Database tables are created aut
 - `DELETE /api/projects/:projectId/tasks/:taskId`
 - `GET /api/dashboard`
 
-## Demo Video Checklist
 
-For a 2-5 minute walkthrough, show:
-
-1. Signup/login
-2. Creating a project
-3. Adding a second registered user by email
-4. Creating and assigning tasks
-5. Updating task status as Admin and Member
-6. Dashboard metrics and overdue task count
-7. Railway live URL and environment variable setup
