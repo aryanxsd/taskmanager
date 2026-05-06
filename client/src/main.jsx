@@ -301,20 +301,32 @@ function Dashboard({ dashboard }) {
 
 function TeamPanel({ members, isAdmin, projectId, currentUserId, onChange }) {
   const [form, setForm] = useState({ email: "", role: "Member" });
+  const [message, setMessage] = useState("");
 
   async function addMember(event) {
     event.preventDefault();
-    await api(`/api/projects/${projectId}/members`, {
-      method: "POST",
-      body: JSON.stringify(form)
-    });
-    setForm({ email: "", role: "Member" });
-    onChange();
+    setMessage("");
+    try {
+      await api(`/api/projects/${projectId}/members`, {
+        method: "POST",
+        body: JSON.stringify(form)
+      });
+      setMessage(`${form.email} was added as ${form.role}.`);
+      setForm({ email: "", role: "Member" });
+      onChange();
+    } catch (err) {
+      setMessage(err.message);
+    }
   }
 
   async function removeMember(userId) {
-    await api(`/api/projects/${projectId}/members/${userId}`, { method: "DELETE" });
-    onChange();
+    setMessage("");
+    try {
+      await api(`/api/projects/${projectId}/members/${userId}`, { method: "DELETE" });
+      onChange();
+    } catch (err) {
+      setMessage(err.message);
+    }
   }
 
   return (
@@ -333,6 +345,7 @@ function TeamPanel({ members, isAdmin, projectId, currentUserId, onChange }) {
           <button className="primary" type="submit">Add</button>
         </form>
       )}
+      {message && <p className={message.includes("added") ? "success" : "error"}>{message}</p>}
       <div className="member-grid">
         {members.map((member) => (
           <article className="member" key={member.id}>
