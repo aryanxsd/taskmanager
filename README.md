@@ -1,6 +1,6 @@
 # TaskForge - Team Task Management App
 
-TaskForge is a full-stack team task management web application built for Railway deployment. Users can sign up, create projects, invite members, assign tasks, update task status, and view dashboard metrics.
+TaskForge is a full-stack team task management web application deployed on Render with a Supabase PostgreSQL database. Users can sign up, create projects, invite members, assign tasks, update task status, and view dashboard metrics.
 
 ## Features
 
@@ -21,7 +21,8 @@ TaskForge is a full-stack team task management web application built for Railway
 - Backend: Node.js, Express
 - Database: PostgreSQL
 - Auth: JWT, bcrypt password hashing
-- Deployment: Railway
+- Deployment: Render
+- Hosted database: Supabase PostgreSQL
 
 ## Local Setup
 
@@ -54,28 +55,35 @@ npm run dev
 
 The frontend runs at `http://localhost:5173` and proxies API calls to `http://localhost:5000`.
 
-## Railway Deployment
+## Render Deployment
 
 1. Push this folder to GitHub.
-2. Create a new Railway project from the GitHub repository.
-3. Add a PostgreSQL database service in Railway.
-4. Set environment variables on the web service:
+2. Open Render and create a new Web Service.
+3. Connect the GitHub repository.
+4. Use these service settings:
+
+```text
+Language: Node
+Branch: main
+Build Command: npm install --include=dev && npm run build
+Start Command: npm start
+```
+
+5. Set environment variables on the Render web service:
 
 ```env
-DATABASE_URL=${{Postgres.DATABASE_URL}}
+DATABASE_URL=your-supabase-postgres-connection-string
 JWT_SECRET=your-long-production-secret
 NODE_ENV=production
 ```
 
-If your Railway PostgreSQL URL requires SSL, add `PGSSLMODE=require`.
-
-5. Railway will run the root build script:
+6. Render will install dependencies and run the production build:
 
 ```bash
 npm run build
 ```
 
-6. Railway will start the app with:
+7. Render will start the app with:
 
 ```bash
 npm start
@@ -97,5 +105,4 @@ The app exposes `/api/health` for health checks. Database tables are created aut
 - `PATCH /api/projects/:projectId/tasks/:taskId`
 - `DELETE /api/projects/:projectId/tasks/:taskId`
 - `GET /api/dashboard`
-
 
